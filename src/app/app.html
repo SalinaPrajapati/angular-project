@@ -83,35 +83,3 @@
   <router-outlet />
 </main>
 
-<footer class="site-footer border-top bg-white">
-  <div class="container py-3">
-    <details>
-      <summary class="text-body-secondary small">Mock API tools</summary>
-      <p class="small text-body-secondary mt-2">
-        This demo has no real server; a mock API answers in the browser. Use
-        these to try the error and token-refresh behaviour.
-      </p>
-      <div class="d-flex flex-wrap align-items-center gap-3">
-        <div class="form-check mb-0">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            id="simulate-errors"
-            [checked]="mock.simulateErrors()"
-            (change)="mock.simulateErrors.set(!mock.simulateErrors())"
-          />
-          <label class="form-check-label" for="simulate-errors">
-            Simulate server errors (list and draft saving)
-          </label>
-        </div>
-        <button
-          class="btn btn-sm btn-outline-secondary"
-          type="button"
-          (click)="mock.expireAccessTokens()"
-        >
-          Expire access token
-        </button>
-      </div>
-    </details>
-  </div>
-</footer>

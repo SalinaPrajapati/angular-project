@@ -1,6 +1,6 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { Injectable, inject } from "@angular/core";
+import { Observable } from "rxjs";
 import {
   ApplicationDetail,
   ApplicationFormValue,
@@ -12,25 +12,29 @@ import {
   Person,
   RiskLevel,
   SensitiveFields,
-} from './models';
+} from "./models";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class ApplicationsService {
   private readonly http = inject(HttpClient);
 
   list(query: ListQuery): Observable<Page<ApplicationSummary>> {
-    let params = new HttpParams().set('page', query.page).set('pageSize', query.pageSize);
+    let params = new HttpParams()
+      .set("page", query.page)
+      .set("pageSize", query.pageSize);
     if (query.status) {
-      params = params.set('status', query.status);
+      params = params.set("status", query.status);
     }
     if (query.search) {
-      params = params.set('search', query.search);
+      params = params.set("search", query.search);
     }
-    return this.http.get<Page<ApplicationSummary>>('/api/applications', { params });
+    return this.http.get<Page<ApplicationSummary>>("/api/applications", {
+      params,
+    });
   }
 
   counts(): Observable<StatusCounts> {
-    return this.http.get<StatusCounts>('/api/applications/counts');
+    return this.http.get<StatusCounts>("/api/applications/counts");
   }
 
   get(id: string): Observable<ApplicationDetail> {
@@ -42,10 +46,13 @@ export class ApplicationsService {
   }
 
   createDraft(value: ApplicationFormValue): Observable<{ id: string }> {
-    return this.http.post<{ id: string }>('/api/applications', { value });
+    return this.http.post<{ id: string }>("/api/applications", { value });
   }
 
-  updateDraft(id: string, value: ApplicationFormValue): Observable<{ id: string }> {
+  updateDraft(
+    id: string,
+    value: ApplicationFormValue,
+  ): Observable<{ id: string }> {
     return this.http.put<{ id: string }>(`/api/applications/${id}`, { value });
   }
 
@@ -57,12 +64,15 @@ export class ApplicationsService {
     return this.http.get<SensitiveFields>(`/api/applications/${id}/sensitive`);
   }
 
-  decide(id: string, body: { decision: Decision; riskLevel: RiskLevel; note: string }): Observable<unknown> {
+  decide(
+    id: string,
+    body: { decision: Decision; riskLevel: RiskLevel; note: string },
+  ): Observable<unknown> {
     return this.http.post(`/api/applications/${id}/decision`, body);
   }
 
   reviewers(): Observable<Person[]> {
-    return this.http.get<Person[]>('/api/reviewers');
+    return this.http.get<Person[]>("/api/reviewers");
   }
 
   assign(id: string, reviewerId: string): Observable<unknown> {

@@ -2,6 +2,8 @@
 
 An Angular 20 app where **Sales** create merchant applications, **Reviewers** review the ones assigned to them, and **Admins** see everything and manage assignments. It runs against a mock API that lives in the browser, so there is nothing else to start.
 
+New to Angular? Start with the [Project Guide](PROJECT_GUIDE.md): a plain-language tour of the app, the code and the mock data.
+
 ## Run it
 
 ```bash
