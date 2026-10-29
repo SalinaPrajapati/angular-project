@@ -1,0 +1,136 @@
+.status-message {
+  margin: 0;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: var(--bs-secondary-color);
+}
+
+.stat {
+  --stat-color: var(--bs-primary);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  width: 100%;
+  height: 100%;
+  padding: 1rem 1rem 0.9rem;
+  overflow: hidden;
+  border: 1px solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius-lg);
+  background: #fff;
+  box-shadow: var(--bs-box-shadow-sm);
+  color: var(--bs-body-color);
+  text-align: left;
+  transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background: var(--stat-color);
+  }
+
+  &:hover {
+    border-color: var(--stat-color);
+    box-shadow: 0 6px 18px rgba(18, 20, 43, 0.1);
+    transform: translateY(-2px);
+  }
+
+  &.is-active {
+    border-color: var(--stat-color);
+    box-shadow: 0 0 0 1px var(--stat-color), 0 6px 18px rgba(18, 20, 43, 0.1);
+    background: color-mix(in srgb, var(--stat-color) 7%, #fff);
+  }
+
+  &[data-status='draft'] { --stat-color: #64748b; }
+  &[data-status='submitted'] { --stat-color: #0891b2; }
+  &[data-status='in_review'] { --stat-color: #d97706; }
+  &[data-status='approved'] { --stat-color: #16a34a; }
+  &[data-status='rejected'] { --stat-color: #dc2626; }
+}
+
+.stat__label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--bs-secondary-color);
+  font-size: 0.85rem;
+  font-weight: 500;
+
+  &::before {
+    content: '';
+    width: 0.5rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--stat-color);
+  }
+}
+
+.stat__value {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.apps-table {
+  --bs-table-bg: transparent;
+
+  thead th {
+    border-bottom-color: var(--bs-border-color);
+    color: var(--bs-secondary-color);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+
+  th[scope='row'] {
+    font-weight: 600;
+  }
+}
+
+// Below the md breakpoint each row becomes a small card, so nothing scrolls sideways.
+@media (max-width: 767.98px) {
+  .apps-table {
+    thead {
+      display: none;
+    }
+
+    tr {
+      display: block;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--bs-border-color);
+    }
+
+    th[scope='row'],
+    td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.25rem 0;
+      border: 0;
+      text-align: right;
+      box-shadow: none;
+    }
+
+    th[scope='row'] {
+      font-size: 1.05rem;
+    }
+
+    [data-label]::before {
+      content: attr(data-label);
+      flex: none;
+      color: var(--bs-secondary-color);
+      font-weight: 400;
+      text-align: left;
+    }
+
+    td:last-child {
+      justify-content: flex-start;
+      padding-top: 0.5rem;
+    }
+  }
+}

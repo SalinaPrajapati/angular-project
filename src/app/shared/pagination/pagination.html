@@ -1,0 +1,37 @@
+<nav aria-label="Pagination">
+  <ul class="pagination mb-0 flex-wrap">
+    <li class="page-item" [class.disabled]="page() === 1">
+      <button
+        class="page-link"
+        type="button"
+        [disabled]="page() === 1"
+        (click)="go(page() - 1)"
+      >
+        Previous
+      </button>
+    </li>
+    @for (p of pages(); track p) {
+    <li class="page-item" [class.active]="p === page()">
+      <button
+        class="page-link"
+        type="button"
+        [attr.aria-current]="p === page() ? 'page' : null"
+        [attr.aria-label]="'Page ' + p"
+        (click)="go(p)"
+      >
+        {{ p }}
+      </button>
+    </li>
+    }
+    <li class="page-item" [class.disabled]="page() === totalPages()">
+      <button
+        class="page-link"
+        type="button"
+        [disabled]="page() === totalPages()"
+        (click)="go(page() + 1)"
+      >
+        Next
+      </button>
+    </li>
+  </ul>
+</nav>

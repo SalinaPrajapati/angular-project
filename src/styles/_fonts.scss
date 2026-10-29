@@ -1,0 +1,26 @@
+// Bricolage Grotesque, self-hosted (npm: @fontsource/bricolage-grotesque) so the page makes no
+// request to a third-party font server and the Content Security Policy can stay strict.
+
+$font-dir: '../../node_modules/@fontsource/bricolage-grotesque/files';
+
+@each $weight in (400, 500, 600, 700) {
+  @font-face {
+    font-family: 'Bricolage Grotesque';
+    font-style: normal;
+    font-display: swap;
+    font-weight: $weight;
+    src: url('#{$font-dir}/bricolage-grotesque-latin-#{$weight}-normal.woff2') format('woff2');
+  }
+}
+
+// A local font sized to match Bricolage Grotesque. It is shown while the real font loads, so
+// the text does not jump when the swap happens. (Metrics measured from the font files;
+// Arial and Liberation Sans share the same metrics.)
+@font-face {
+  font-family: 'Bricolage Grotesque Fallback';
+  src: local('Arial'), local('Liberation Sans'), local('Helvetica');
+  size-adjust: 107.04%;
+  ascent-override: 86.88%;
+  descent-override: 25.22%;
+  line-gap-override: 0%;
+}

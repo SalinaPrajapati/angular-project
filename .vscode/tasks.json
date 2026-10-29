@@ -1,0 +1,89 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Install and build Angular app",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"install",
+				"&&",
+				"npm",
+				"run",
+				"build"
+			],
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Build Angular app",
+			"type": "shell",
+			"command": "NG_CLI_ANALYTICS=false npm run build",
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Start Angular dev server",
+			"type": "shell",
+			"command": "NG_CLI_ANALYTICS=false npm start",
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Check Angular dependency",
+			"type": "shell",
+			"command": "npm ls @angular/core @angular/router",
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify Angular startup fix",
+			"type": "shell",
+			"command": "NG_CLI_ANALYTICS=false npm run build",
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Restart Angular dev server",
+			"type": "shell",
+			"command": "fuser -k 4200/tcp || true; NG_CLI_ANALYTICS=false npm start -- --port 4200",
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Inspect Git repository",
+			"type": "shell",
+			"command": "git status --short --branch && git remote -v && git log -1 --oneline",
+			"problemMatcher": []
+		},
+		{
+			"label": "Check remote and staged files",
+			"type": "shell",
+			"command": "git fetch origin && git status --short --branch && git log --oneline --left-right HEAD...origin/main",
+			"problemMatcher": []
+		},
+		{
+			"label": "Commit Angular project",
+			"type": "shell",
+			"command": "git add .gitignore .github angular.json package.json package-lock.json tsconfig.json tsconfig.app.json src && git diff --cached --stat && git commit -m \"Add Angular frontend project\"",
+			"problemMatcher": []
+		},
+		{
+			"label": "Push project to GitHub",
+			"type": "shell",
+			"command": "git push origin main",
+			"problemMatcher": []
+		},
+		{
+			"label": "Verify GitHub push",
+			"type": "shell",
+			"command": "git status --short --branch && git log -1 --oneline",
+			"problemMatcher": []
+		}
+	]
+}

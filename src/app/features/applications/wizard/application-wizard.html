@@ -1,0 +1,239 @@
+<section class="container page">
+  <app-page-header
+    heading="New application"
+    [crumbs]="[{ label: 'Applications', link: '/applications' }, { label: 'New application' }]"
+  >
+    Answer each step. Your progress is saved as a draft while you type, so you
+    can leave and continue later.
+  </app-page-header>
+
+  <div class="row">
+    <div class="col-lg-10 col-xl-8">
+      @switch (loadState()) { @case ('loading') {
+      <p role="status">Loading your draft…</p>
+      } @case ('error') {
+      <div class="alert alert-danger" role="alert">
+        <p class="mb-3">We couldn't load this draft.</p>
+        <button
+          class="btn btn-primary me-2"
+          type="button"
+          (click)="retryLoad()"
+        >
+          Try again
+        </button>
+        <a class="btn btn-outline-secondary" routerLink="/applications"
+          >Back to applications</a
+        >
+      </div>
+      } @case ('ready') {
+      <ol class="steps" aria-label="Progress">
+        @for (label of steps; track label; let i = $index) {
+        <li
+          [class.is-current]="i === step()"
+          [class.is-done]="i < step()"
+          [attr.aria-current]="i === step() ? 'step' : null"
+        >
+          <span class="steps__number" aria-hidden="true">{{ i + 1 }}</span>
+          <span class="steps__label">
+            {{ label }} @if (i < step()) {
+            <span class="visually-hidden">(completed)</span>
+            }
+          </span>
+        </li>
+        }
+      </ol>
+
+      <div class="card">
+        <form
+          class="card-body p-4"
+          [formGroup]="form"
+          (ngSubmit)="onSubmit()"
+          novalidate
+        >
+          <h2 #stepHeading tabindex="-1" class="h4 mb-1">
+            Step {{ step() + 1 }} of {{ steps.length }}: {{ steps[step()] }}
+          </h2>
+
+          <p class="save-status" role="status">
+            @switch (saveState()) { @case ('saving') { Saving draft… } @case
+            ('saved') { Draft saved. } @case ('error') { Couldn't save the
+            draft. Your answers are still here. } }
+          </p>
+          @if (saveState() === 'error') {
+          <button
+            class="btn btn-sm btn-outline-primary mb-3"
+            type="button"
+            (click)="retrySave()"
+          >
+            Retry saving
+          </button>
+          } @if (stepError()) {
+          <div class="alert alert-danger py-2" role="alert">
+            Some answers need attention. Fix the highlighted fields to continue.
+          </div>
+          } @switch (step()) { @case (0) {
+          <app-form-field
+            inputId="legalName"
+            label="Legal business name"
+            [control]="c.business.controls.legalName"
+            autocomplete="organization"
+          />
+          <app-form-field
+            inputId="registrationNumber"
+            label="Registration number"
+            hint="Letters, digits and hyphens, for example REG-123456."
+            [control]="c.business.controls.registrationNumber"
+          />
+          <app-form-field
+            inputId="businessType"
+            label="Business type"
+            type="select"
+            [options]="businessTypes"
+            [control]="c.business.controls.businessType"
+          />
+          <app-form-field
+            inputId="website"
+            label="Website"
+            type="url"
+            hint="Include https://"
+            autocomplete="url"
+            [control]="c.business.controls.website"
+          />
+          } @case (1) {
+          <app-form-field
+            inputId="fullName"
+            label="Contact name"
+            autocomplete="name"
+            [control]="c.contact.controls.fullName"
+          />
+          <app-form-field
+            inputId="email"
+            label="Email"
+            type="email"
+            autocomplete="email"
+            [control]="c.contact.controls.email"
+          />
+          <app-form-field
+            inputId="phone"
+            label="Phone"
+            type="tel"
+            inputmode="tel"
+            autocomplete="tel"
+            hint="Include the country code, for example +1 555 010 2030."
+            [control]="c.contact.controls.phone"
+          />
+          } @case (2) {
+          <div class="row">
+            <div class="col-md-6">
+              <app-form-field
+                inputId="monthlyVolume"
+                label="Expected monthly volume (USD)"
+                type="number"
+                inputmode="numeric"
+                hint="At least 1,000."
+                [control]="c.financial.controls.monthlyVolume"
+              />
+            </div>
+            <div class="col-md-6">
+              <app-form-field
+                inputId="averageTicket"
+                label="Average ticket (USD)"
+                type="number"
+                inputmode="decimal"
+                [control]="c.financial.controls.averageTicket"
+              />
+            </div>
+          </div>
+          <app-form-field
+            inputId="bankAccountNumber"
+            label="Bank account number"
+            type="password"
+            inputmode="numeric"
+            hint="Sensitive: hidden while you type. 8 to 17 digits."
+            [control]="c.financial.controls.bankAccountNumber"
+          />
+          <app-form-field
+            inputId="taxId"
+            label="Tax ID"
+            type="password"
+            hint="Sensitive: hidden while you type. Format 12-3456789."
+            [control]="c.financial.controls.taxId"
+          />
+          } @case (3) { @let v = form.getRawValue();
+          <p>Check your answers. Sensitive details stay masked.</p>
+          <dl class="summary">
+            <div>
+              <dt>Legal name</dt>
+              <dd>{{ v.business.legalName }}</dd>
+            </div>
+            <div>
+              <dt>Registration number</dt>
+              <dd>{{ v.business.registrationNumber }}</dd>
+            </div>
+            <div>
+              <dt>Business type</dt>
+              <dd>{{ v.business.businessType }}</dd>
+            </div>
+            <div>
+              <dt>Website</dt>
+              <dd>{{ v.business.website || '—' }}</dd>
+            </div>
+            <div>
+              <dt>Contact</dt>
+              <dd>{{ v.contact.fullName }}</dd>
+            </div>
+            <div>
+              <dt>Email</dt>
+              <dd>{{ v.contact.email }}</dd>
+            </div>
+            <div>
+              <dt>Phone</dt>
+              <dd>{{ v.contact.phone }}</dd>
+            </div>
+            <div>
+              <dt>Monthly volume</dt>
+              <dd>{{ v.financial.monthlyVolume }}</dd>
+            </div>
+            <div>
+              <dt>Average ticket</dt>
+              <dd>{{ v.financial.averageTicket }}</dd>
+            </div>
+            <div>
+              <dt>Bank account</dt>
+              <dd>{{ maskedAccount() }}</dd>
+            </div>
+            <div>
+              <dt>Tax ID</dt>
+              <dd>{{ maskedTaxId() }}</dd>
+            </div>
+          </dl>
+          @if (submitError(); as message) {
+          <div class="alert alert-danger" role="alert">{{ message }}</div>
+          } } }
+
+          <div class="d-flex flex-wrap gap-2 mt-4">
+            @if (step() > 0) {
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              [disabled]="submitting()"
+              (click)="back()"
+            >
+              Back
+            </button>
+            }
+            <a class="btn btn-link" routerLink="/applications">Save and exit</a>
+            <button
+              class="btn btn-primary ms-auto"
+              type="submit"
+              [disabled]="submitting()"
+            >
+              @if (isLast()) { {{ submitting() ? 'Submitting…' : 'Submit application' }} } @else { Next }
+            </button>
+          </div>
+        </form>
+      </div>
+      } }
+    </div>
+  </div>
+</section>

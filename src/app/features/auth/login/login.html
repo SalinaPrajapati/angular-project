@@ -1,0 +1,65 @@
+<section class="container page">
+  <div class="login-shell card mx-auto">
+    <div class="row g-0">
+      <aside class="col-lg-5 login-aside">
+        <span class="brand-mark mb-4" aria-hidden="true">M</span>
+        <h2 class="login-aside__title">
+          Onboard merchants with confidence.
+        </h2>
+        <p class="login-aside__lead">
+          Create, review and approve merchant applications, with every role
+          seeing only what it should.
+        </p>
+        <ul class="login-aside__list d-none d-lg-block">
+          <li>Drafts save automatically as you type</li>
+          <li>Role-based review and assignment</li>
+          <li>Sensitive details masked by default</li>
+        </ul>
+      </aside>
+
+      <div class="col-lg-7">
+        <form class="login-form" (submit)="submit($event)">
+          <h1 class="h3 mb-1">Sign in</h1>
+          <p class="text-body-secondary mb-4">
+            Choose a demo account. There is no password; the mock API signs you
+            in with a bearer token.
+          </p>
+
+          <fieldset class="roles mb-4">
+            <legend class="visually-hidden">Demo account</legend>
+            @for (user of users; track user.id) {
+              <label class="role-option">
+                <input
+                  class="form-check-input mt-0"
+                  type="radio"
+                  name="user"
+                  [checked]="selected() === user.id"
+                  (change)="selected.set(user.id)"
+                />
+                <span class="role-option__avatar" aria-hidden="true">{{
+                  user.name[0]
+                }}</span>
+                <span class="role-option__name">{{ user.name }}</span>
+                <span
+                  class="badge rounded-pill bg-primary-subtle text-primary-emphasis ms-auto"
+                >
+                  {{ roleLabels[user.role] }}
+                </span>
+              </label>
+            }
+          </fieldset>
+
+          @if (failed()) {
+            <div class="alert alert-danger" role="alert">
+              Sign-in failed. Please try again.
+            </div>
+          }
+
+          <button class="btn btn-primary w-100" type="submit" [disabled]="busy()">
+            {{ busy() ? "Signing in…" : "Continue" }}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

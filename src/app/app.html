@@ -1,38 +1,117 @@
-<main class="shell">
-  <header class="topbar">
-    <a class="wordmark" href="/" aria-label="Angular App home">
-      <span class="mark" aria-hidden="true">A</span>
-      <span>Angular App</span>
-    </a>
-    <span class="status"><span class="status-dot"></span>Workspace ready</span>
-  </header>
+<a class="skip-link" href="#main" (click)="skipToMain($event)"
+  >Skip to main content</a
+>
 
-  <section class="welcome" aria-labelledby="page-title">
-    <p class="eyebrow">PROJECT WORKSPACE</p>
-    <h1 id="page-title">Your next idea<br /><span>starts here.</span></h1>
-    <p class="intro">
-      The Angular foundation is in place. Add your product screens and workflows
-      as the requirements are clarified.
-    </p>
-    <div class="rule" aria-hidden="true"></div>
-    <div class="details">
-      <div>
-        <span class="detail-label">Framework</span>
-        <span class="detail-value">Angular · Standalone</span>
-      </div>
-      <div>
-        <span class="detail-label">Navigation</span>
-        <span class="detail-value">Router configured</span>
-      </div>
-      <div>
-        <span class="detail-label">Styles</span>
-        <span class="detail-value">SCSS</span>
-      </div>
+<header class="site-header">
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark" aria-label="Main">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/">
+        <span class="brand-mark" aria-hidden="true">M</span>
+        <span>Merchant Applications</span>
+      </a>
+
+      @if (auth.user(); as user) {
+        <button
+          class="navbar-toggler"
+          type="button"
+          aria-controls="main-menu"
+          aria-label="Toggle navigation"
+          [attr.aria-expanded]="menuOpen()"
+          (click)="menuOpen.set(!menuOpen())"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div
+          id="main-menu"
+          class="collapse navbar-collapse"
+          [class.show]="menuOpen()"
+        >
+          <ul class="navbar-nav me-auto gap-md-1 ms-md-3">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                routerLink="/applications"
+                routerLinkActive="active"
+                ariaCurrentWhenActive="page"
+                [routerLinkActiveOptions]="{ exact: true }"
+                >Applications</a
+              >
+            </li>
+            @if (user.role === 'sales') {
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  routerLink="/applications/new"
+                  routerLinkActive="active"
+                  ariaCurrentWhenActive="page"
+                  >New application</a
+                >
+              </li>
+            }
+          </ul>
+
+          <div
+            class="d-flex flex-column flex-md-row align-items-md-center gap-3 py-3 py-md-0"
+          >
+            <div class="d-flex align-items-center gap-2">
+              <span class="avatar" aria-hidden="true">{{
+                initials(user.name)
+              }}</span>
+              <span class="text-white lh-sm">
+                {{ user.name }}
+                <span class="d-block small text-white-50">{{
+                  roleLabels[user.role]
+                }}</span>
+              </span>
+            </div>
+            <button
+              class="btn btn-outline-light btn-sm"
+              type="button"
+              (click)="signOut()"
+            >
+              Sign out
+            </button>
+          </div>
+        </div>
+      }
     </div>
-  </section>
+  </nav>
+</header>
 
-  <footer class="footer">
-    <span>ANGULAR APP</span><span>Ready for your requirements</span>
-  </footer>
+<main id="main" tabindex="-1" #main>
   <router-outlet />
 </main>
+
+<footer class="site-footer border-top bg-white">
+  <div class="container py-3">
+    <details>
+      <summary class="text-body-secondary small">Mock API tools</summary>
+      <p class="small text-body-secondary mt-2">
+        This demo has no real server; a mock API answers in the browser. Use
+        these to try the error and token-refresh behaviour.
+      </p>
+      <div class="d-flex flex-wrap align-items-center gap-3">
+        <div class="form-check mb-0">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="simulate-errors"
+            [checked]="mock.simulateErrors()"
+            (change)="mock.simulateErrors.set(!mock.simulateErrors())"
+          />
+          <label class="form-check-label" for="simulate-errors">
+            Simulate server errors (list and draft saving)
+          </label>
+        </div>
+        <button
+          class="btn btn-sm btn-outline-secondary"
+          type="button"
+          (click)="mock.expireAccessTokens()"
+        >
+          Expire access token
+        </button>
+      </div>
+    </details>
+  </div>
+</footer>

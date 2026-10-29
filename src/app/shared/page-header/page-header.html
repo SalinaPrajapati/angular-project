@@ -1,0 +1,30 @@
+<header>
+  @if (crumbs().length) {
+  <nav aria-label="Breadcrumb">
+    <ol class="breadcrumb mb-2">
+      @for (crumb of crumbs(); track crumb.label; let last = $last) {
+      <li
+        class="breadcrumb-item"
+        [class.active]="last"
+        [attr.aria-current]="last ? 'page' : null"
+      >
+        @if (crumb.link && !last) {
+        <a [routerLink]="crumb.link">{{ crumb.label }}</a>
+        } @else { {{ crumb.label }} }
+      </li>
+      }
+    </ol>
+  </nav>
+  }
+
+  <div class="d-flex flex-wrap align-items-start justify-content-between gap-3">
+    <div class="min-w-0">
+      @if (eyebrow()) {
+      <p class="eyebrow">{{ eyebrow() }}</p>
+      }
+      <h1>{{ heading() }}</h1>
+      <div class="lead"><ng-content /></div>
+    </div>
+    <div class="actions"><ng-content select="[actions]" /></div>
+  </div>
+</header>
